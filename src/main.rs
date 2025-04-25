@@ -12,8 +12,17 @@ use esp_idf_sys as _; // If using the `binstart` feature of `esp-idf-sys`, alway
 use heapless::String;
 use log::*;
 
-const SSID: &str = env!("RUST_ESP32_STD_DEMO_WIFI_SSID");
-const PASS: &str = env!("RUST_ESP32_STD_DEMO_WIFI_PASS");
+macro_rules! env_with_default {
+    ($var:literal, $default:expr) => {
+        match option_env!($var) {
+            Some(val) => val,
+            None => $default,
+        }
+    };
+}
+
+const SSID: &str = env_with_default!("RUST_ESP32_STD_DEMO_WIFI_SSID", "MyDefaultSSID");
+const PASS: &str = env_with_default!("RUST_ESP32_STD_DEMO_WIFI_PASS", "MyDefaultPass");
 
 pub fn wifi(
     modem: impl Peripheral<P = esp_idf_hal::modem::Modem> + 'static,
