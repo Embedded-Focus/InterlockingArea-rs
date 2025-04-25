@@ -1,0 +1,2 @@
+export RUST_ESP32_STD_DEMO_WIFI_SSID="foo"
+export RUST_ESP32_STD_DEMO_WIFI_PASS="bar"

@@ -1,0 +1,43 @@
+[package]
+name = "interlocking-area-rs"
+version = "0.1.0"
+authors = ["Rainer Poisel <rainer@embedded-focus.com>"]
+edition = "2021"
+resolver = "2"
+rust-version = "1.77"
+
+[[bin]]
+name = "interlocking-area-rs"
+harness = false # do not use the built in cargo test harness -> resolve rust-analyzer errors
+
+[profile.release]
+opt-level = "s"
+
+[profile.dev]
+debug = true
+opt-level = "z"
+
+[features]
+default = ["std", "hal", "esp-idf-sys/native"]
+
+pio = ["esp-idf-sys/pio"]
+all = ["std", "nightly", "experimental", "embassy"]
+hal = ["esp-idf-hal", "embedded-svc", "esp-idf-svc"]
+std = ["alloc", "esp-idf-sys/std", "esp-idf-sys/binstart", "embedded-svc?/std", "esp-idf-hal?/std", "esp-idf-svc?/std"]
+alloc = ["embedded-svc?/alloc", "esp-idf-hal?/alloc", "esp-idf-svc?/alloc"]
+nightly = ["embedded-svc?/nightly", "esp-idf-svc?/nightly"]
+experimental = ["esp-idf-svc?/experimental"]
+embassy = ["esp-idf-hal?/embassy-sync", "esp-idf-hal?/critical-section"]
+
+[dependencies]
+log = "0.4"
+esp-idf-sys = { version = "^0.36", default-features = false }
+esp-idf-hal = { version = "^0.45", optional = true, default-features = false }
+esp-idf-svc = { version = "0.51", optional = true, default-features = false }
+embedded-svc = { version = "^0.28", optional = true, default-features = false }
+anyhow = "1.0.72"
+futures = "0.3.28"
+heapless = "0.8.0"
+
+[build-dependencies]
+embuild = "0.33"
