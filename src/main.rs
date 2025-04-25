@@ -1,7 +1,12 @@
+use embedded_svc::http::Method::Get;
+use embedded_svc::io::Write;
 use embedded_svc::wifi::{AuthMethod, ClientConfiguration, Configuration as WifiConfiguration};
+use esp_idf_hal::delay::FreeRtos;
 use esp_idf_hal::{peripheral::Peripheral, prelude::Peripherals};
+use esp_idf_svc::io::EspIOError;
 use esp_idf_svc::{
     eventloop::EspSystemEventLoop,
+    http::server::EspHttpServer,
     nvs::{EspDefaultNvsPartition, EspNvsPartition, NvsDefault},
     ping::Configuration as PingConfiguration,
     ping::EspPing,
@@ -92,4 +97,26 @@ fn main() {
         timer_service,
     )
     .unwrap();
+
+    let mut server = EspHttpServer::new(&Default::default()).unwrap();
+
+    server
+        .fn_handler("/hello", Get, move |req| {
+            let mut resp = req.into_response(200, Some("OK"), &[("Content-Type", "text/html")])?;
+
+            // Send the HTML body
+            resp.write_all(
+                b"<!DOCTYPE html>
+            <html>
+            <head><title>Hello</title></head>
+            <body><h1>Hello from ESP32!</h1></body>
+            </html>",
+            )?;
+            Ok::<(), EspIOError>(())
+        })
+        .unwrap();
+
+    loop {
+        FreeRtos::delay_ms(2);
+    }
 }
