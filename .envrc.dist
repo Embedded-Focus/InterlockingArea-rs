@@ -1,2 +1,7 @@
 export RUST_ESP32_STD_DEMO_WIFI_SSID="foo"
 export RUST_ESP32_STD_DEMO_WIFI_PASS="bar"
+
+if command -v uv >/dev/null 2>&1; then
+    uv sync
+    . .venv/bin/activate
+fi

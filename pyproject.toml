@@ -4,4 +4,6 @@ version = "0.1.0"
 description = "Python parts of Rust InterlockingArea implementation"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "jc>=1.25.5",
+]
