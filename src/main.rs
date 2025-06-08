@@ -18,9 +18,8 @@ use esp_idf_svc::{
     wifi::{AsyncWifi, EspWifi},
 };
 use esp_idf_sys::{
-    self as _, esp_vfs_fat_mount_config_t, esp_vfs_fat_spiflash_mount_ro,
-    esp_vfs_fat_spiflash_mount_rw_wl, fclose, fgets, fopen, wl_handle_t, CONFIG_WL_SECTOR_SIZE,
-    ESP_OK, WL_INVALID_HANDLE,
+    self as _, esp_vfs_fat_mount_config_t, esp_vfs_fat_spiflash_mount_ro, fclose, fgets, fopen,
+    CONFIG_WL_SECTOR_SIZE, ESP_OK,
 }; // If using the `binstart` feature of `esp-idf-sys`, always keep this module imported
 use heapless::String;
 use log::*;
@@ -129,15 +128,12 @@ fn main() {
         max_files: 4,
         allocation_unit_size: CONFIG_WL_SECTOR_SIZE as usize,
         disk_status_check_enable: false,
-        use_one_fat: false,
     };
-    let mut wl_handle: wl_handle_t = WL_INVALID_HANDLE;
     let result = unsafe {
         esp_vfs_fat_spiflash_mount_ro(
             base_path.as_ptr(),
             partition_label.as_ptr(),
             &config as *const _,
-            // &mut wl_handle,
         )
     };
 
